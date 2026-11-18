@@ -1,0 +1,56 @@
+<!doctype html><html lang="ru"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Зачёт — геометрия, 7 класс</title><style> *{box-sizing:border-box}body{margin:0;background:#eef3fa;color:#172b46;font:18px system-ui,sans-serif}main{max-width:850px;margin:auto;padding:22px}section,article{background:white;border-radius:18px;padding:22px;margin:16px 0;box-shadow:0 3px 15px #17365b12}h1{font-size:30px}h2{font-size:21px}button{background:#245bb0;color:white;border:0;border-radius:12px;padding:14px 24px;font:inherit;cursor:pointer}label{display:block;padding:12px;border:1px solid #d5dfed;border-radius:10px;margin:8px 0}input[type=text]{font:inherit;width:150px;padding:12px;border:1px solid #9badc5;border-radius:8px}svg{display:block;width:100%;max-width:390px;margin:12px auto;color:#172b46} .ok{color:#13784b}.bad{color:#b52d36} [hidden]{display:none!important}</style><main><section id="start"><h1>Геометрия · 7 класс</h1><p>Зачёт за I триместр на оценку «3»</p><p>10 заданий. Для зачёта необходимо выполнить верно не менее 8. В задачах вводи только число.</p><button id="begin">Начать зачёт</button></section><div id="quiz" hidden></div><section id="result" hidden></section></main><script>
+const $=id=>document.getElementById(id);
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const mix=a=>{a=[...a];for(let i=a.length-1;i>0;i--){let j=rnd(0,i);[a[i],a[j]]=[a[j],a[i]]}return a};
+const line=(x,y,u,v)=>`<path d="M${x} ${y}L${u} ${v}" stroke="currentColor" stroke-width="2.5" fill="none"/>`;
+const txt=(x,y,t,c='currentColor')=>`<text x="${x}" y="${y}" fill="${c}" font-size="15" text-anchor="middle">${t}</text>`;
+const dot=(x,y)=>`<circle cx="${x}" cy="${y}" r="3" fill="currentColor"/>`;
+const svg=s=>`<svg viewBox="0 0 320 160" role="img" aria-label="Чертёж">${s}</svg>`;
+const arc=(x,y,r,a,b,c='#2563eb')=>{let p=t=>[x+r*Math.cos(t*Math.PI/180),y-r*Math.sin(t*Math.PI/180)];let A=p(a),B=p(b);return `<path d="M${A} A${r} ${r} 0 ${b-a>180?1:0} 0 ${B}" fill="none" stroke="${c}" stroke-width="2"/>`};
+let questions=[];
+function generate(){let [A,B,C,D,O]=mix('ABCDEFKLMNOPRST'.split('')).slice(0,5);let a=rnd(3,18),b=rnd(3,18);let seg=svg(line(30,70,290,70)+dot(30,70)+dot(135,70)+dot(290,70)+txt(30,55,A)+txt(135,55,B)+txt(290,55,C));let seg2=svg(line(30,70,290,70)+dot(30,70)+dot(135,70)+dot(290,70)+txt(30,55,A)+txt(135,55,B)+txt(290,55,C)+txt(82,96,a+' см','#2563eb')+txt(212,96,b+' см','#2563eb'));
+let left=rnd(3,12), middle=rnd(5,19), right=rnd(3,12), total=left+middle+right;
+let segNew=svg(line(25,55,295,55)+[25,95,225,295].map(x=>dot(x,55)).join('')+txt(25,40,A)+txt(95,40,B)+txt(225,40,C)+txt(295,40,D)+txt(60,76,left+' см')+txt(260,76,right+' см')+line(25,93,25,103)+line(25,103,295,103)+line(295,93,295,103)+txt(160,126,total+' см','#2563eb'));
+let angles=[ [40,'острый'],[90,'прямой'],[125,'тупой'] ];let [deg,kind]=angles[rnd(0,2)];let angle=svg(line(150,125,285,125)+line(150,125,150+105*Math.cos(deg*Math.PI/180),125-105*Math.sin(deg*Math.PI/180))+arc(150,125,25,0,deg)+txt(150,145,O)+txt(290,145,A)+txt(150+120*Math.cos(deg*Math.PI/180),125-120*Math.sin(deg*Math.PI/180)+5,B)+txt(190,110,deg+'°'));
+let base=()=>line(25,110,295,110)+line(160,110,220,20)+txt(23,132,A)+txt(298,132,B)+txt(230,20,C)+txt(160,135,O)+dot(160,110);
+let s=rnd(4,16)*10;let sl=s>90?115:65;let rayx=160+90*Math.cos((180-s)*Math.PI/180),rayy=110-90*Math.sin((180-s)*Math.PI/180);let adjacent=svg(line(25,110,295,110)+line(160,110,rayx,rayy)+arc(160,110,25,180-s,180)+arc(160,110,37,0,180-s,'#d97706')+txt(23,132,A)+txt(298,132,B)+txt(rayx,rayy-8,C)+txt(160,135,O)+txt(95,85,s+'°')+txt(225,85,'?'));
+let v=mix([40,50,60,70,80,100,110,120,130,140])[0];let th=v*Math.PI/360;let dx=65*Math.sin(th),dy=65*Math.cos(th);let cross=line(160-dx,80-dy,160+dx,80+dy)+line(160+dx,80-dy,160-dx,80+dy)+txt(148-dx,72-dy,A)+txt(172+dx,72-dy,B)+txt(172+dx,94+dy,C)+txt(148-dx,94+dy,D)+txt(183,83,O);let vert=svg(cross);let vert2=svg(cross+txt(160,48,v+'°')+txt(160,121,'?'));
+let half=rnd(2,7)*5,full=half*2;let bis=svg(line(50,145,280,145)+line(50,145,50+130*Math.cos(full*Math.PI/180),145-130*Math.sin(full*Math.PI/180))+line(50,145,50+175*Math.cos(half*Math.PI/180),145-175*Math.sin(half*Math.PI/180))+arc(50,145,32,0,half)+arc(50,145,32,half,full)+txt(40,155,O)+txt(290,145,A)+txt(50+145*Math.cos(full*Math.PI/180),145-145*Math.sin(full*Math.PI/180),B)+txt(50+190*Math.cos(half*Math.PI/180),145-190*Math.sin(half*Math.PI/180),C));
+let known=rnd(2,7)*10, remaining=90-known, target=remaining/2;
+let point=(deg,r)=>[55+r*Math.cos(deg*Math.PI/180),140-r*Math.sin(deg*Math.PI/180)];
+let cp=point(remaining,115), dp=point(target,175), cl=point(remaining,130), dl=point(target,190), kl=point((90+remaining)/2,65);
+let perp=svg(line(55,140,290,140)+line(55,140,55,15)+line(55,140,...cp)+line(55,140,...dp)+`<path d="M55 124 H71 V140" stroke="currentColor" fill="none" stroke-width="1.7"/>`+arc(55,140,38,remaining,90)+dot(55,140)+txt(43,155,O)+txt(300,145,A)+txt(55,12,B)+txt(cl[0],Math.max(12,cl[1]),C)+txt(dl[0],dl[1],D)+txt(kl[0],kl[1],known+'°','#2563eb'));
+
+// Задание 5: две пересекающиеся прямые и дополнительный луч.
+let E=mix('ABCDEFKLMNOPRST'.split('').filter(x=>![A,B,C,D,O].includes(x)))[0];
+let rays=[A,E,C,B,D]; // A и B, C и D — противоположные лучи.
+let rotation=rnd(0,11)*30;
+let directions=[0,35,80,180,260];
+let relationDiagram=svg(rays.map((name,i)=>{
+  let t=(directions[i]+rotation)*Math.PI/180;
+  return line(160,80,160+60*Math.cos(t),80-60*Math.sin(t))+
+    txt(160+72*Math.cos(t),80-72*Math.sin(t)+5,name);
+}).join('')+dot(160,80)+txt(170,94,O));
+let ang=(x,y)=>x+O+y;
+let groups=[
+ [[ang(A,C),ang(C,B)],[ang(A,E),ang(E,B)],[ang(C,B),ang(B,D)]],
+ [[ang(A,C),ang(B,D)],[ang(A,D),ang(B,C)]],
+ [[ang(A,E),ang(E,C)],[ang(E,C),ang(C,B)],[ang(A,E),ang(B,D)]]
+];
+let category=rnd(0,2), pair=[...mix(groups[category][rnd(0,groups[category].length-1)]),['смежные','вертикальные','ни смежные, ни вертикальные'][category]];
+return [
+['Отрезки',segNew,`Известно, что ${A+D} = ${total} см, ${A+B} = ${left} см, ${C+D} = ${right} см. Найдите длину отрезка ${B+C} (в см).`,middle],
+['Длина отрезка',seg2,`Найдите длину отрезка ${A+C} (в см).`,a+b],
+['Виды углов',angle,'Определите вид угла.',kind,['острый','прямой','тупой']],
+['Элементы угла',angle,`Назовите вершину угла ${A+O+B}.`,O,[A,O,B]],
+['Взаимное расположение углов',relationDiagram,`Какими являются углы ${pair[0]} и ${pair[1]}?`,pair[2],['смежные','вертикальные','ни смежные, ни вертикальные']],
+['Свойство смежных углов',adjacent,`Углы смежные. Один равен ${s}°. Найдите второй (в градусах).`,180-s],
+['Вертикальные углы',vert,`Какой угол вертикален углу ${A+O+B}?`,C+O+D,[A+O+D,C+O+D,B+O+C]],
+['Свойство вертикальных углов',vert2,`Найдите величину угла, обозначенного знаком вопроса (в градусах).`,v],
+['Биссектриса',bis,`Луч ${O+C} — биссектриса угла ${A+O+B}, равного ${full}°. Найдите угол ${A+O+C} (в градусах).`,half],
+['Перпендикулярность и биссектриса',perp,`Лучи ${O+A} и ${O+B} перпендикулярны. Угол ${B+O+C} равен ${known}°. Луч ${O+D} — биссектриса угла ${A+O+C}. Найдите угол ${A+O+D} (в градусах).`,target]
+];}
+function start(){questions=generate();$('start').hidden=true;$('result').hidden=true;$('quiz').hidden=false;$('quiz').innerHTML=questions.map((q,i)=>`<article><h2>Задание ${i+1}</h2>${q[1]}<p>${q[2]}</p>${q[4]?mix(q[4]).map(x=>`<label><input type="radio" name="q${i}" value="${x}"> ${x}</label>`).join(''):`<input type="text" inputmode="numeric" id="q${i}" aria-label="Ответ на задание ${i+1}" placeholder="Ответ">`}</article>`).join('')+'<button id="finish">Завершить зачёт</button><p id="warning" role="alert"></p>';$('finish').onclick=finish;window.scrollTo(0,0)}
+function finish(){let answers=questions.map((q,i)=>q[4]?document.querySelector(`input[name=q${i}]:checked`)?.value:$('q'+i).value.trim());if(answers.some(x=>!x)){$('warning').textContent='Ответь на все задания.';return}let checks=questions.map((q,i)=>q[4]?answers[i]===q[3]:/^\d+$/.test(answers[i])&&Number(answers[i])===q[3]);let n=checks.filter(Boolean).length;$('quiz').hidden=true;$('result').hidden=false;$('result').innerHTML=`<h1 class="${n>=8?'ok':'bad'}">${n>=8?'Зачёт сдан! Оценка: 3':'Зачёт не сдан'}</h1><h2>${n} из 10</h2>${checks.map((x,i)=>`<p class="${x?'ok':'bad'}">${x?'✓':'✗'} ${i+1}. ${questions[i][0]} — ${x?'верно':'ошибка'}</p>`).join('')}<p>${n>=8?'Поздравляем!':'Подготовься и попробуй позже.'}</p><button id="again">Новый вариант</button>`;$('again').onclick=start;window.scrollTo(0,0)}
+$('begin').onclick=start;
+</script></html>
